@@ -5,6 +5,8 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloWorld", "HelloWorld.csproj", "{D5E69584-A0EA-4182-A97A-3E5DA7DCFC7E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OperatorConditional", "..\..\..\PracticeCode\OperatorConditional\OperatorConditional.csproj", "{356BD532-615F-4E55-84EC-A186E8C3BDD5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{D5E69584-A0EA-4182-A97A-3E5DA7DCFC7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5E69584-A0EA-4182-A97A-3E5DA7DCFC7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5E69584-A0EA-4182-A97A-3E5DA7DCFC7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{356BD532-615F-4E55-84EC-A186E8C3BDD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{356BD532-615F-4E55-84EC-A186E8C3BDD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{356BD532-615F-4E55-84EC-A186E8C3BDD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{356BD532-615F-4E55-84EC-A186E8C3BDD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
