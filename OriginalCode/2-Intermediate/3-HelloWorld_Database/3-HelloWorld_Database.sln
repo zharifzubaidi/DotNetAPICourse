@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloWorld", "HelloWorld.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OperatorConditional", "..\..\..\PracticeCode\OperatorConditional\OperatorConditional.csproj", "{356BD532-615F-4E55-84EC-A186E8C3BDD5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "loopMethod", "..\..\..\PracticeCode\loopMethod\loopMethod.csproj", "{83928684-218A-4C3E-AC4B-D8C0E0E47557}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{356BD532-615F-4E55-84EC-A186E8C3BDD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{356BD532-615F-4E55-84EC-A186E8C3BDD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{356BD532-615F-4E55-84EC-A186E8C3BDD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83928684-218A-4C3E-AC4B-D8C0E0E47557}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83928684-218A-4C3E-AC4B-D8C0E0E47557}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83928684-218A-4C3E-AC4B-D8C0E0E47557}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83928684-218A-4C3E-AC4B-D8C0E0E47557}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
