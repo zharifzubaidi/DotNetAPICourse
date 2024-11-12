@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.NetworkInformation;
 
-namespace OperatorConditional{
+namespace loopMethod{
     internal class Program{
         
         static int accessibleInt = 7; // Variable is in class scope. This can be similar to global class in Cpp
