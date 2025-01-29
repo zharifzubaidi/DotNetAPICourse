@@ -30,3 +30,4 @@ CREATE TABLE TutorialAppSchema.Computer(
 
 /*SELECT * means select everything*/
 SELECT * FROM TutorialAppSchema.Computer
+

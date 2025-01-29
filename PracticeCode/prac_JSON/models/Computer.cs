@@ -1,4 +1,4 @@
-namespace database.models
+namespace pracJSON.models
 {
     // Model
     public class Computer

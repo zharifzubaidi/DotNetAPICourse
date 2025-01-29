@@ -9,6 +9,7 @@ using Microsoft.Data.SqlClient;
 using database.data;
 using System.Runtime.Serialization;
 using System.Globalization;
+using Microsoft.Extensions.Configuration;
 
 
 namespace dataBase
@@ -18,11 +19,16 @@ namespace dataBase
         // Main Method
         static void Main(string[] args)
         {
-            // Create instance of datacontextdapper class
-            DataContextDapper dapper = new DataContextDapper();
+            // Get value from JSON configuration file (appsettings.json)
+            IConfiguration config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json") // Select which JSON file to read
+                .Build();                        // Return a configuration object
 
-            // Entity Framework 
-            DataContextEF entityFramework = new DataContextEF();
+            // Dapper application. Create instance of datacontextdapper class
+            DataContextDapper dapper = new DataContextDapper(config);
+
+            // Entity framework application. Create instance of datacontextEF class
+            DataContextEF entityFramework = new DataContextEF(config);
 
             // Dapper sql call: query. Query statement.
             string sqlCommand = "SELECT GETDATE()";

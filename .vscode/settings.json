@@ -1,5 +1,0 @@
-{
-    "csharp.preview.improvedLaunchExperience": true,
-    "dotnet.automaticallySyncWithActiveItem": true,
-    "dotnet.preferVisualStudioCodeFileSystemWatcher": true
-}
