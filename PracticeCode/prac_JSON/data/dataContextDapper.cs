@@ -7,7 +7,7 @@ using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 
-namespace pracJSON.data
+namespace prac_JSON.data
 {
     // Dapper class
     public class DataContextDapper

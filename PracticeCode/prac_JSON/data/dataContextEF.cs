@@ -1,11 +1,11 @@
 using System.Security.Cryptography;
-using pracJSON.models;
+using prac_JSON.models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 
-namespace pracJSON.data
+namespace prac_JSON.data
 {
     // Dapper class
     public class DataContextEF : DbContext // Inherit from DbContext class

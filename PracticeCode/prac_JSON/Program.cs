@@ -4,39 +4,24 @@ using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
 using Dapper;
-using pracJSON.models; //format: main namespace.folder containing separate class
+using prac_JSON.models; //format: main namespace.folder containing separate class
 using Microsoft.Data.SqlClient;
-using pracJSON.data;
+using prac_JSON.data;
 using System.Runtime.Serialization;
 using System.Globalization;
 using Microsoft.Extensions.Configuration;
 
 
-namespace pracJSON
+namespace prac_JSON
 {   
     internal class Program
     {
         // Main Method
         static void Main(string[] args)
         {
-            // Get value from JSON configuration file (appsettings.json)
-            IConfiguration config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json") // Select which JSON file to read
-                .Build();                        // Return a configuration object
+            // Console.WriteLine(rightNow.ToString());
 
-            // Dapper application. Create instance of datacontextdapper class
-            DataContextDapper dapper = new DataContextDapper(config);
-
-            // Entity framework application. Create instance of datacontextEF class
-            DataContextEF entityFramework = new DataContextEF(config);
-
-            // Dapper sql call: query. Query statement.
-            string sqlCommand = "SELECT GETDATE()";
-            DateTime rightNow = dapper.LoadDataSingle<DateTime>(sqlCommand); // will return a single row of the query
-
-            //Console.WriteLine(rightNow.ToString());
-
-            // Define model variables
+            // Declare model variables
             Computer myComputer = new Computer()
             {
                 Motherboard = "Z690",
@@ -47,12 +32,7 @@ namespace pracJSON
                 VideoCard = "RTX 2060"
             };
 
-            // Entity framework Add a new row to the table based on top model
-            entityFramework.Add(myComputer);
-            entityFramework.SaveChanges();
-
-            // Writing to database
-            // Writing sql INSERT statement to inserting data into SQL table. This command is to enter the header for each column in a sql table
+            // Write this to a text file
             string sql = @"INSERT INTO TutorialAppSchema.Computer(
                 Motherboard,
                 HasWifi,
@@ -67,68 +47,24 @@ namespace pracJSON
                     + "','" + myComputer.Price.ToString("0.00", CultureInfo.InvariantCulture)
                     + "','" + myComputer.VideoCard
                     + "')";
-            //Console.WriteLine(sql);
 
-            // Dapper call: Execute. Insert statement. This function will return how many rows affected
-            bool result = dapper.ExecuteSql(sql);
-            //Console.WriteLine(result);
+            // How to write to a file //
+            // Write to log file
+            // If trigger this command again, it will overwrite the previous log.txt
+            File.WriteAllText("log.txt", "\n" + sql + "\n");
 
-            // Reading from database //
-            // Dapper call: Query. Select statement. This function is to get a row from the table.
-            string sqlSelect = @"
-            SELECT
-                Computer.ComputerId,
-                Computer.Motherboard,
-                Computer.HasWifi,
-                Computer.HasLTE,
-                Computer.ReleaseDate,
-                Computer.Price,
-                Computer.VideoCard
-            FROM TutorialAppSchema.Computer";
+            // Write using StreamWriter. Use append argument to ensure it doesn't overwrite
+            using StreamWriter openFile = new StreamWriter("log.txt", append: true);
 
-            // Dapper application. Will receive IEnumerable from query command. Alternatively, we can cast the return value to list. dbConnection.Query<Computer>(sqlSelect).ToList();
-            IEnumerable<Computer> computers = dapper.LoadData<Computer>(sqlSelect);
+            openFile.WriteLine("\n" + sql);
 
-            Console.WriteLine("'ComputerId','Motherboard','HasWifi','HasLTE','ReleaseDate','Price','VideoCard'");
+            openFile.Close(); // Close the file after writing to release the lock to the file
 
-            foreach (Computer singleComputer in computers)
-            {
-                Console.WriteLine("'" + singleComputer.ComputerId
-                    + "','" + singleComputer.Motherboard
-                    + "','" + singleComputer.HasWifi
-                    + "','" + singleComputer.HasLTE
-                    + "','" + singleComputer.ReleaseDate.ToString("yyyy-MM-dd")
-                    + "','" + singleComputer.Price.ToString("0.00", CultureInfo.InvariantCulture)
-                    + "','" + singleComputer.VideoCard
-                    + "'");
-            }
+            // How to read from a file //
+            Console.WriteLine("Reading from log.txt");
+            string fileText = File.ReadAllText("log.txt");
+            Console.WriteLine(fileText);
 
-            // Entity framework application
-            IEnumerable<Computer>? computersEF = entityFramework.Computer?.ToList<Computer>();
-
-            if (computersEF != null)
-            {
-                Console.WriteLine("'ComputerId','Motherboard','HasWifi','HasLTE','ReleaseDate','Price','VideoCard'");
-
-                foreach (Computer singleComputer in computersEF)
-                {
-                    Console.WriteLine("'" + singleComputer.ComputerId
-                        + "','" + singleComputer.Motherboard
-                        + "','" + singleComputer.HasWifi
-                        + "','" + singleComputer.HasLTE
-                        + "','" + singleComputer.ReleaseDate.ToString("yyyy-MM-dd")
-                        + "','" + singleComputer.Price.ToString("0.00", CultureInfo.InvariantCulture)
-                        + "','" + singleComputer.VideoCard
-                        + "'");
-                }
-            }
-
-            //Console.WriteLine(myComputer.Motherboard);
-            //Console.WriteLine(myComputer.HasWifi);
-            //Console.WriteLine(myComputer.HasWifi);
-            //Console.WriteLine(myComputer.ReleaseDate);
-            //Console.WriteLine(myComputer.Price);
-            //Console.WriteLine(myComputer.VideoCard);
         }
     }
 }
