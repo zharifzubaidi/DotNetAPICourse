@@ -1,4 +1,4 @@
-namespace EFramework.Models // namespace <project name>.<folder name for the model or class name>
+namespace JsonExample.Models // namespace <project name>.<folder name for the model or class name>
 {
     // Creating computer class as a model representing a computer's specifications
     // This class encapsulates the properties of a computer, such as motherboard, CPU cores, and more
@@ -14,7 +14,7 @@ namespace EFramework.Models // namespace <project name>.<folder name for the mod
         public int? CPUCores { get; set; } = 0; // Nullable int for CPU cores, default is 0
         public bool HasWifi { get; set; }
         public bool HasLTE { get; set; }
-        public DateTime ReleaseDate { get; set; }
+        public DateTime? ReleaseDate { get; set; }
         public decimal Price { get; set; }
         public string VideoCard { get; set; } = string.Empty;   // Use an empty string as default value to handle nullability
     }

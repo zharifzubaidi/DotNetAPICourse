@@ -20,17 +20,5 @@ Write-Host "Adding Microsoft.EntityFrameworkCore.SqlServer..."
 dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 if ($LASTEXITCODE -eq 0) { Write-Host "Microsoft.EntityFrameworkCore.SqlServer added successfully." } else { Write-Host "Failed to add Microsoft.EntityFrameworkCore.SqlServer." }
 
-Write-Host "Adding Microsoft.Extensions.Configuration..."
-dotnet add package Microsoft.Extensions.Configuration
-if ($LASTEXITCODE -eq 0) { Write-Host "Microsoft.Extensions.Configuration added successfully." } else { Write-Host "Failed to add Microsoft.Extensions.Configuration." }
-
-Write-Host "Adding Microsoft.Extensions.Configuration.Json..."
-dotnet add package Microsoft.Extensions.Configuration.Json
-if ($LASTEXITCODE -eq 0) { Write-Host "Microsoft.Extensions.Configuration.Json added successfully." } else { Write-Host "Failed to add Microsoft.Extensions.Configuration.Json." }
-
-Write-Host "Adding Newtonsoft.Json..."
-dotnet add package Newtonsoft.Json
-if ($LASTEXITCODE -eq 0) { Write-Host "Newtonsoft.Json added successfully." } else { Write-Host "Failed to add Newtonsoft.Json." }
-
 Write-Host "All package installation commands completed."
 

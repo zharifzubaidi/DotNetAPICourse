@@ -1,26 +1,34 @@
 ﻿using System.Data;
 using System.Diagnostics.Contracts;
 using Dapper;
-using EFramework.Models; // namespace <project name>.<folder name for the model or class name>
-using EFramework.DatabaseLogic;
+using ConfigExample.Models; // namespace <project name>.<folder name for the model or class name>
+using ConfigExample.DatabaseLogic;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
-namespace EFramework
+namespace ConfigExample
 {
     // Main Class serves as the entry point for the application
     internal class Program
     {
         static void Main(string[] args)
         {
+            // Extracting data from the appsettings.json file
+            // IConfiguration will search for ConnectionStrings in the appsettings.json file
+            IConfiguration config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory()) // Set the base path to the current directory
+                .AddJsonFile("appsettings.json")
+                .Build();
+
             // Dapper Example - has more control over SQL queries and is generally faster for simple operations
             // This example demonstrates how to use Dapper to interact with a SQL Server database.
-            DataContextDapper dapper = new DataContextDapper();
+            DataContextDapper dapper = new DataContextDapper(config);
             DateTime rightNow = dapper.LoadDataSingle<DateTime>("SELECT GETDATE()");
             Console.WriteLine($"Current Date and Time: {rightNow}");
 
             // Entity Framework Example
             // This example demonstrates how to use Entity Framework to interact with a SQL Server database.
-            DataContextEFramework entityFramework = new DataContextEFramework();
+            DataContextEFramework entityFramework = new DataContextEFramework(config);
 
             // Model data
             Computer myComputer = new Computer()

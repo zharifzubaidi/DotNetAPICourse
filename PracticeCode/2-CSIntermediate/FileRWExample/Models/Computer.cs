@@ -1,4 +1,4 @@
-namespace EFramework.Models // namespace <project name>.<folder name for the model or class name>
+namespace FileRWExample.Models // namespace <project name>.<folder name for the model or class name>
 {
     // Creating computer class as a model representing a computer's specifications
     // This class encapsulates the properties of a computer, such as motherboard, CPU cores, and more
