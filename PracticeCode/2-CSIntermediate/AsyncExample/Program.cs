@@ -1,155 +1,52 @@
-﻿using System.Data;
-using System.Diagnostics.Contracts;
-using Dapper;
-using AsyncExample.Models; 
-using AsyncExample.DatabaseLogic;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-using System.Text.Json;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using AutoMapper;
-using Microsoft.Extensions.Logging;
-
+﻿
 namespace AsyncExample
 {
-    // Model map method
-    // Automapper
+    // Async Example Program
     internal class Program
     {
-        static void Main(string[] args)
+        // We need to wrap our return type in a Task to enable asynchronous programming
+        // Task encapsulates the logic that we want to run asynchronously
+        // Wait to complete the task before proceeding
+        static async Task Main(string[] args)   // Change from static void to static async Task method to enable asynchronous programming
         {
-            // Create a configuration object to read the appsettings.json file
-            IConfiguration config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-            // Create an instance of DataContextDapper using the configuration
-            DataContextDapper dapper = new DataContextDapper(config);
-
-            // Load data from Json file
-            string computerJson = File.ReadAllText("ComputersSnake.json"); // Data is in snake_case format
-
-            // -----------------------------Method 1: Automapper-----------------------------
-            // Map destination based mode to the source based model
-            // ComputerSnake is the source model with snake_case properties
-            // Computer is the destination model with PascalCase properties
-            // Add LoggerFactory to the MapperConfiguration
-
-            // -----------------------------Old way of mapping using Automapper-----------------------------//
-            /*
-            var loggerFactory = LoggerFactory.Create(static builder =>
+            // 1st Async Example
+            Task firstTask = new Task(() =>     // Creating an instance of a Task that runs asynchronously
             {
-                builder
-                    .AddConsole()
-                    .SetMinimumLevel(LogLevel.Debug);
+                //Console.WriteLine("First Task is running");
+                Thread.Sleep(100); // Sleep in milliseconds
+                Console.WriteLine("Task 1 - 100ms");
             });
+            firstTask.Start();   // Start the task
 
-            Mapper mapper = new Mapper(new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ComputerSnake, Computer>()
-                    .ForMember(destination => destination.ComputerId, options =>
-                        options.MapFrom(source => source.computer_id))
-                    .ForMember(destination => destination.Motherboard, options =>
-                        options.MapFrom(source => source.motherboard))
-                    .ForMember(destination => destination.CPUCores, options =>
-                        options.MapFrom(source => source.cpu_cores))
-                    .ForMember(destination => destination.HasWifi, options =>
-                        options.MapFrom(source => source.has_wifi))
-                    .ForMember(destination => destination.HasLTE, options =>
-                        options.MapFrom(source => source.has_lte))
-                    .ForMember(destination => destination.ReleaseDate, options =>
-                        options.MapFrom(source => source.release_date))
-                    .ForMember(destination => destination.Price, options =>
-                        options.MapFrom(source => source.price))
-                    .ForMember(destination => destination.VideoCard, options =>
-                        options.MapFrom(source => source.video_card));
-            }, loggerFactory));
+            // 2nd Async Example together with Sync Example
+            Task secondTask = ConsoleAfterDelayAsync("Task 2 - 150ms", 150);
 
-            IEnumerable<ComputerSnake>? computersSnakeSystem = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<ComputerSnake>>(computerJson);
+            //ConsoleAfterDelay("Delay", 101); // Synchronous method call
+            ConsoleAfterDelay("Delay - 75ms", 75); // Synchronous method call
 
-            if (computersSnakeSystem != null)
-            {
-                IEnumerable<ComputerSnake> computerResult = mapper.Map<IEnumerable<ComputerSnake>>(computersSnakeSystem);
-                Console.WriteLine("---------Old AutoMapper mapping---------");
-                foreach (ComputerSnake singleComputer in computerResult)
-                {
-                    Console.WriteLine($"Found computer using AutoMapper: {singleComputer.motherboard}");
-                }
-            }
-            else
-            {
-                Console.WriteLine("No computers found in the JSON file.");
-                return;
-            }
-            */
-            // -----------------------------Old way of mapping using Automapper-----------------------------//
+            Task thirdTask = ConsoleAfterDelayAsync("Task 3 - 125ms", 50);  // This starts after Task Sync 
 
-            // -----------------------------New way of mapping using Automapper-----------------------------//
+            await firstTask; // Await the completion of the first task. Program flow blocks here until the task is complete.
             
-            var loggerNewFactory = LoggerFactory.Create(builder =>
-            {
-                builder
-                    .AddConsole()
-                    .SetMinimumLevel(LogLevel.Debug);
-            });
+            await secondTask; // Await the completion of the second task
 
-            var mapperConfig = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<ComputerSnake, Computer>()
-                    .ForMember(dest => dest.ComputerId, opt => opt.MapFrom(src => src.computer_id))
-                    .ForMember(dest => dest.Motherboard, opt => opt.MapFrom(src => src.motherboard))
-                    .ForMember(dest => dest.CPUCores, opt => opt.MapFrom(src => src.cpu_cores))
-                    .ForMember(dest => dest.HasWifi, opt => opt.MapFrom(src => src.has_wifi))
-                    .ForMember(dest => dest.HasLTE, opt => opt.MapFrom(src => src.has_lte))
-                    .ForMember(dest => dest.ReleaseDate, opt => opt.MapFrom(src => src.release_date))
-                    .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.price))
-                    .ForMember(dest => dest.VideoCard, opt => opt.MapFrom(src => src.video_card));
-            }, loggerNewFactory);
+            Console.WriteLine("After task creation");
 
-            IMapper mapperNew = mapperConfig.CreateMapper();
+            await thirdTask; // Await the completion of the third task
+        }
 
-            IEnumerable<ComputerSnake>? computersNewSnakeSystem = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<ComputerSnake>>(computerJson);
+        // Synchronous method
+        static void ConsoleAfterDelay(string text, int delayTime)
+        {
+            Thread.Sleep(delayTime);        // Synchronously wait for the specified delay time
+            Console.WriteLine(text);
+        }
 
-            if (computersNewSnakeSystem != null)
-            {
-                IEnumerable<ComputerSnake> computerNewResult = mapperNew.Map<IEnumerable<ComputerSnake>>(computersNewSnakeSystem);
-                Console.WriteLine("------------------New AutoMapper mapping------------------");
-                Console.WriteLine("Automapper Property Count: " + computerNewResult.Count());
-                // foreach (ComputerSnake singleComputer in computerNewResult)
-                // {
-                //     Console.WriteLine($"Found computer using AutoMapper: {singleComputer.motherboard}");
-                // }
-            }
-            else
-            {
-                Console.WriteLine("No computers found in the JSON file.");
-                return;
-            }
-
-            // -----------------------------New way of mapping using Automapper-----------------------------//
-
-
-
-            // -----------------------------Method 2: JSON Attribute Mapping-----------------------------
-            // Need to be setup in our Computer and ComputerSnake models
-            IEnumerable<Computer>? computersJsonSystem = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<Computer>>(computerJson);
-            if (computersJsonSystem != null)
-            {
-                
-                Console.WriteLine("------------------Json attribute mapping------------------");
-                Console.WriteLine("JSON Property Count: " + computersJsonSystem.Count());
-                // foreach (Computer singleComputer in computersJsonSystem)
-                // {
-                //     Console.WriteLine($"Found computer using Json attributes: {singleComputer.Motherboard}");
-                // }
-            }
-            else
-            {
-                Console.WriteLine("No computers found in the JSON file.");
-                return;
-            }
+        // Asynchronous method
+        static async Task ConsoleAfterDelayAsync(string text, int delayTime)
+        {
+            await Task.Delay(delayTime);    // Asynchronously wait for the specified delay time
+            Console.WriteLine(text);
         }
     }
 }

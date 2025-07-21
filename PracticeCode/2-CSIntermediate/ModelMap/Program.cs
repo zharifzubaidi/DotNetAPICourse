@@ -14,7 +14,8 @@ using Microsoft.Extensions.Logging;
 namespace ModelMap
 {
     // Model map method
-    // Automapper
+    // - Automapper
+    // - System.Text.Json
     internal class Program
     {
         static void Main(string[] args)
@@ -87,7 +88,7 @@ namespace ModelMap
             // -----------------------------Old way of mapping using Automapper-----------------------------//
 
             // -----------------------------New way of mapping using Automapper-----------------------------//
-            
+
             var loggerNewFactory = LoggerFactory.Create(builder =>
             {
                 builder
@@ -137,7 +138,7 @@ namespace ModelMap
             IEnumerable<Computer>? computersJsonSystem = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<Computer>>(computerJson);
             if (computersJsonSystem != null)
             {
-                
+
                 Console.WriteLine("------------------Json attribute mapping------------------");
                 Console.WriteLine("JSON Property Count: " + computersJsonSystem.Count());
                 // foreach (Computer singleComputer in computersJsonSystem)
