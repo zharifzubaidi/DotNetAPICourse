@@ -40,5 +40,9 @@ Write-Host "Adding Microsoft.Extensions.Logging..."
 dotnet add package Microsoft.Extensions.Logging.Console
 if ($LASTEXITCODE -eq 0) { Write-Host "Microsoft.Extensions.Logging.Console added successfully." } else { Write-Host "Failed to add Microsoft.Extensions.Logging.Console." }    
 
+Write-Host "Adding Swashbuckle.AspNetCore..."
+dotnet add package Swashbuckle.AspNetCore
+if ($LASTEXITCODE -eq 0) { Write-Host "Swashbuckle.AspNetCore added successfully." } else { Write-Host "Failed to add Swashbuckle.AspNetCore." }    
+
 Write-Host "All package installation commands completed."
 
