@@ -8,7 +8,6 @@ SELECT [UserId],
 [Email],
 [Gender],
 [Active] FROM TutorialAppSchema.Users
-ORDER BY UserId DESC
 GO
 
 SELECT [UserId],
@@ -85,10 +84,3 @@ SELECT COUNT(*) FROM TutorialAppSchema.Users
 -- Delete data query
 DELETE FROM TutorialAppSchema.Users
 WHERE UserId = 1001 -- primary key use to filter the record to delete
-
--- Select user by email
-SELECT * FROM TutorialAppSchema.Users
-WHERE FirstName = 'Test'
-
-SELECT * FROM TutorialAppSchema.Users
-WHERE UserId BETWEEN 1000 AND 1020

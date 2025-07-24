@@ -8,7 +8,6 @@ SELECT [UserId],
 [Email],
 [Gender],
 [Active] FROM TutorialAppSchema.Users
-ORDER BY UserId DESC
 GO
 
 SELECT [UserId],
