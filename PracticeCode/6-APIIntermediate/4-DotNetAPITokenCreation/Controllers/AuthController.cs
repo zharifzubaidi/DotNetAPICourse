@@ -5,7 +5,6 @@ using System.Text;
 using DotNetAPI.Data;
 using DotNetAPI.Dtos;
 using DotNetAPI.UserModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -13,9 +12,6 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace DotNetAPI.Controllers
 {
-    [Authorize] // Require authentication for this controller
-    [ApiController]
-    [Route("[controller]")]
     public class AuthController : ControllerBase
     {
         // Fields
@@ -33,7 +29,6 @@ namespace DotNetAPI.Controllers
 
         #region Endpoints
         // Register user and allow login method using post method endpoints
-        [AllowAnonymous] // Allow anonymous access to this endpoint
         [HttpPost("Register")]
         public IActionResult Register(UserForRegistrationDto userForRegistration)
         {
@@ -122,7 +117,6 @@ namespace DotNetAPI.Controllers
             throw new Exception("Password and Password Confirm do not match");
         }
 
-        [AllowAnonymous] 
         [HttpPost("Login")]
         public IActionResult Login(UserForLoginDto userForLogin)
         {
@@ -162,24 +156,6 @@ namespace DotNetAPI.Controllers
                 { "token", CreateToken(userId)}
             });
         }
-
-        [HttpGet("RefreshToken")]
-        public IActionResult RefreshToken()
-        {
-            string userId = User.FindFirst("userId")?.Value + "";
-
-            // Get user ID from the database
-            string userIdSql = @"
-                SELECT UserId FROM TutorialAppSchema.Users WHERE UserId = " + userId;
-
-            int userIdFromDb = _dapper.LoadDataSingle<int>(userIdSql);
-
-            return Ok(new Dictionary<string, string>
-            {
-                { "token", CreateToken(userIdFromDb)}
-            });
-        }
-
         #endregion
 
         #region Private Methods

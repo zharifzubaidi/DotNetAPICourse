@@ -2,6 +2,12 @@
 # Add dapper and entity framework core to the project 
 # by the following command for database connection
 # This commands will be recorded in the .csproj file
+# To run: powershell -ExecutionPolicy Bypass -File .\add-webapi-packages.ps1
+
+# Run this script from the folder containing your .csproj file
+# Add dapper and entity framework core to the project 
+# by the following command for database connection
+# This commands will be recorded in the .csproj file
 # To run: powershell -ExecutionPolicy Bypass -File .\add-db-packages.ps1
 
 Write-Host "Adding Dapper..."
@@ -28,9 +34,10 @@ Write-Host "Adding Microsoft.EntityFrameworkCore.Relational..."
 dotnet add package Microsoft.EntityFrameworkCore.Relational
 if ($LASTEXITCODE -eq 0) { Write-Host "Microsoft.EntityFrameworkCore.Relational added successfully." } else { Write-Host "Failed to add Microsoft.EntityFrameworkCore.Relational." }
 
-Write-Host "Adding Microsoft.AspNetCore.Authentication.JwtBearer..."
-dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
-if ($LASTEXITCODE -eq 0) { Write-Host "Microsoft.AspNetCore.Authentication.JwtBearer added successfully." } else { Write-Host "Failed to add Microsoft.AspNetCore.Authentication.JwtBearer." }
+Write-Host "Adding Microsoft.EntityFrameworkCore.SqlServer..."
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+if ($LASTEXITCODE -eq 0) { Write-Host "Microsoft.EntityFrameworkCore.SqlServer added successfully." } else { Write-Host "Failed to add Microsoft.EntityFrameworkCore.SqlServer." }
 
 Write-Host "All package installation commands completed."
+
 
