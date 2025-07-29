@@ -22,6 +22,7 @@ namespace DotNetAPI.Controllers
         // Constructor for AuthController
         public AuthController(IConfiguration config)
         {
+
             _dapper = new DataContextDapper(config);
             _authHelper = new AuthHelper(config);
         }
