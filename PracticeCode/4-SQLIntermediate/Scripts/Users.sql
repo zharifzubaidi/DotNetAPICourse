@@ -351,3 +351,13 @@ SELECT [Users].[UserId],
     ORDER BY Users.UserId DESC;       
 
 SELECT * FROM TutorialAppSchema.UserSalary
+
+-- To edit data in a table
+UPDATE TutorialAppSchema.Users
+SET FirstName = 'Davod',
+    LastName = 'Leya',
+    Email = 'davod.doe@example.com',
+    Gender = 'Male',
+    Active = 0
+WHERE UserId = 1; 
+
