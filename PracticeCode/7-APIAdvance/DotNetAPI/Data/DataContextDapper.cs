@@ -57,9 +57,9 @@ namespace DotNetAPI.Data
 
         // Execute SQL commands with parameters
         public bool ExecuteSqlWithParameters(string sql, List<SqlParameter> parameters)
-        {   
+        {
             SqlCommand commandWithParameters = new SqlCommand(sql);
-            foreach(SqlParameter parameter in parameters)
+            foreach (SqlParameter parameter in parameters)
             {
                 commandWithParameters.Parameters.Add(parameter);
             }
@@ -76,6 +76,25 @@ namespace DotNetAPI.Data
 
             // Use Dapper to execute the command and return the number of affected rows
             return rowsAffected > 0;
+        }
+        
+        public IEnumerable<T> LoadDataWithParameters<T>(string sql, DynamicParameters parameters)
+        {
+            // Get the connection string from appsettings.json through private field config
+            IDbConnection dbConnection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+
+            // Use Dapper to execute the query and return the results
+            return dbConnection.Query<T>(sql, parameters);
+        }
+
+        // Retrieve a single row of data from the database
+        public T LoadDataSingleWithParameters<T>(string sql, DynamicParameters parameters)
+        {
+            // Get the connection string from appsettings.json through private field config
+            IDbConnection dbConnection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+
+            // Use Dapper to execute the query and return the results
+            return dbConnection.QuerySingle<T>(sql, parameters);
         }
     }
 }
