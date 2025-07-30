@@ -1,8 +1,10 @@
 using System.Data;
+using AutoMapper;
 using Dapper;
 using DotNetAPI.Data;
 using DotNetAPI.Dtos;
 using DotNetAPI.Helpers;
+using DotNetAPI.UserModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,12 +19,22 @@ namespace DotNetAPI.Controllers
         // Fields
         private readonly DataContextDapper _dapper;
         private readonly AuthHelper _authHelper;
+        private readonly ReusableSql _reusableSql;
+        private readonly IMapper _mapper;
 
         // Constructor for AuthController
         public AuthController(IConfiguration config)
         {
             _dapper = new DataContextDapper(config);
             _authHelper = new AuthHelper(config);
+            _reusableSql = new ReusableSql(config);
+
+            ILoggerFactory loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+
+            _mapper = new Mapper(new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<UserForRegistrationDto, UserComplete>();
+            }, loggerFactory));
         }
 
         #region Endpoints
@@ -50,17 +62,25 @@ namespace DotNetAPI.Controllers
 
                     if (_authHelper.SetPassword(userForSetPassword))
                     {
-                        string sqlAddUser = @"EXEC TutorialAppSchema.spUser_Upsert
-                            @FirstName = '" + userForRegistration.FirstName +
-                            "', @LastName = '" + userForRegistration.LastName +
-                            "', @Email = '" + userForRegistration.Email +
-                            "', @Gender = '" + userForRegistration.Gender +
-                            "', @JobTitle  = '" + userForRegistration.JobTitle +
-                            "', @Department = '" + userForRegistration.Department +
-                            "', @Salary = '" + userForRegistration.Salary +
-                            "', @Active = 1";
+                        // string sqlAddUser = @"EXEC TutorialAppSchema.spUser_Upsert
+                        //     @FirstName = '" + userForRegistration.FirstName +
+                        //     "', @LastName = '" + userForRegistration.LastName +
+                        //     "', @Email = '" + userForRegistration.Email +
+                        //     "', @Gender = '" + userForRegistration.Gender +
+                        //     "', @JobTitle  = '" + userForRegistration.JobTitle +
+                        //     "', @Department = '" + userForRegistration.Department +
+                        //     "', @Salary = '" + userForRegistration.Salary +
+                        //     "', @Active = 1";
 
-                        if (_dapper.ExecuteSql(sqlAddUser))
+                        // if (_dapper.ExecuteSql(sqlAddUser))
+                        // {
+                        //     return Ok();
+                        // }
+
+                        UserComplete userComplete = _mapper.Map<UserComplete>(userForRegistration);
+                        userComplete.Active = true; // Set active status to true
+
+                        if (_reusableSql.UpsertUser(userComplete))
                         {
                             return Ok();
                         }
