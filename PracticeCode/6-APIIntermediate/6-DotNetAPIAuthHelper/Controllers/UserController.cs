@@ -56,7 +56,6 @@ public class UserController : ControllerBase
         return user;
     }
 
-    [HttpGet("Get")]
 
     [HttpPut("EditUser")]
     public IActionResult EditUser(User user)

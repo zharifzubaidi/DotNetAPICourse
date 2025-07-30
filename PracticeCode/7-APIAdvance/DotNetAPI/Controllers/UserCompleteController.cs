@@ -11,49 +11,36 @@ namespace DotNetAPI.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class UserController : ControllerBase
+public class UserCompleteController : ControllerBase
 {
     DataContextDapper _dapper;
 
-    public UserController(IConfiguration config)
+    public UserCompleteController(IConfiguration config)
     {
         _dapper = new DataContextDapper(config);
     }
 
-    #region User Endpoints
-    [HttpGet("GetUsers")]
-    public IEnumerable<User> GetUsers()
+    [HttpGet("GetUsers/{userId}/{isActive}")]
+    public IEnumerable<UserComplete> GetUsers(int userId, bool isActive)
     {
-        string sql = @"
-        SELECT [UserId],
-            [FirstName],
-            [LastName],
-            [Email],
-            [Gender],
-            [Active] 
-        FROM TutorialAppSchema.Users";
+        string sql = @"EXEC TutorialAppSchema.spUsers_Get"; // Will get all users if no userId is provided
+        string param = "";
 
-        IEnumerable<User> users = _dapper.LoadData<User>(sql);
+        if (userId != 0)
+        {   // If userId is provided, append it to the SQL query
+            param += ", @UserId =" + userId.ToString(); // Run stored procedure to get complete user data
+        }
+        
+        if (isActive)
+        { 
+            param += ", @Active =" + isActive.ToString(); // Run stored procedure to get complete user data
+        }
+
+        sql += param.Substring(1); // Remove the first comma
+
+        IEnumerable<UserComplete> users = _dapper.LoadData<UserComplete>(sql);
 
         return users;
-    }
-
-
-    [HttpGet("GetSingleUser/{userId}")]
-    public User GetSingleUser(int userId)
-    {
-        string sql = @"
-        SELECT [UserId],
-            [FirstName],
-            [LastName],
-            [Email],
-            [Gender],
-            [Active] 
-        FROM TutorialAppSchema.Users
-        WHERE UserId = " + userId.ToString();
-
-        User user = _dapper.LoadDataSingle<User>(sql);
-        return user;
     }
 
     [HttpPut("EditUser")]
@@ -144,19 +131,7 @@ public class UserController : ControllerBase
         }
         throw new Exception("Failed to delete user");
     }
-    #endregion
 
-    #region User Salary Endpoints
-    [HttpGet("GetUserSalary/{userId}")]
-    public IEnumerable<UserSalary> GetUserSalary(int userId)
-    {
-        return _dapper.LoadData<UserSalary>(@"
-            SELECT UserSalary.UserId
-                    , UserSalary.Salary
-                    , UserSalary.AverageSalary
-            FROM TutorialAppSchema.UserSalary
-                WHERE UserId = " + userId.ToString());
-    }
 
     [HttpPost("AddUserSalary")]
     public IActionResult AddUserSalary(UserSalary userForAdd)
@@ -212,20 +187,6 @@ public class UserController : ControllerBase
         throw new Exception("Failed to Delete User Salary");
     }
 
-    #endregion
-
-    #region User Job Info Endpoints
-
-    [HttpGet("GetUserJobInfo/{userId}")]
-    public IEnumerable<UserJobInfo> GetUserJobInfo(int userId)
-    {
-        return _dapper.LoadData<UserJobInfo>(@"
-            SELECT UserJobInfo.UserId
-                    , UserJobInfo.JobTitle
-                    , UserJobInfo.Department
-            FROM TutorialAppSchema.UserJobInfo
-                WHERE UserId = " + userId.ToString());
-    }
 
     [HttpPost("AddUserJobInfo")]
     public IActionResult AddUserJobInfo(UserJobInfo userJobInfoForAdd)
@@ -286,6 +247,5 @@ public class UserController : ControllerBase
         throw new Exception("Failed to Delete User Job Info");
     }
 
-    #endregion
 }
 
