@@ -1,6 +1,7 @@
 
 using DotNetAPI.Data;
 using DotNetAPI.Models;
+using DotNetAPI.UserModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

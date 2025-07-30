@@ -1,10 +1,12 @@
 using System.Data;
+using System.Security.Cryptography;
 using Dapper;
 using DotNetAPI.Data;
 using DotNetAPI.Dtos;
 using DotNetAPI.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 
 
 namespace DotNetAPI.Controllers

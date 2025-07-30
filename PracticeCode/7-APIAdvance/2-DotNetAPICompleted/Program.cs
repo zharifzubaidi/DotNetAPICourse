@@ -31,6 +31,9 @@ builder.Services.AddCors((options) =>
     });
 #endregion
 
+// Add addscoped connection betweeen user repository class and interface
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 #region JWT Token Authentication setup
 // JWT Token Validation setup to use with Postman
 // Get the token key from appsettings.json
