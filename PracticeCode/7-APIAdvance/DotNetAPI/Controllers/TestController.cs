@@ -28,7 +28,7 @@ public class TestController : ControllerBase
         return _dapper.LoadDataSingle<DateTime>("SELECT GETDATE()");
     }
 
-    [HttpGet("Test")]
+    [HttpGet("TestText")]
     public string Test()
     {
         return "Your application is up and running!";
