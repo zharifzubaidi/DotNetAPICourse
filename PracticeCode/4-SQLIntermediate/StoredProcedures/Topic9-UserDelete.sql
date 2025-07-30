@@ -11,5 +11,6 @@ BEGIN
     -- Delete from Users
     DELETE FROM TutorialAppSchema.Users
         WHERE UserId = @UserId;
+        
 END
 
